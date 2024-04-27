@@ -27,4 +27,10 @@ impl Bolt {
     pub const fn white() -> Self {
         Self { color: [255; 3] }
     }
+    pub fn center(other: &Self) -> Self {
+        let [r, g, b]: [u8; 3] = other.color;
+        let new_color: [u8; 3] = [r / 2 + 127, g / 2 + 127, b / 2 + 127];
+
+        Self { color: new_color }
+    }
 }

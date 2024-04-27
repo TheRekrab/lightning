@@ -1,3 +1,5 @@
+use crate::bolt::Bolt;
+use crate::coord::Coord;
 use image::{ImageBuffer, Rgb};
 
 use crate::{
@@ -15,8 +17,17 @@ pub fn generate_image() {
         let lightning = Maze::new();
         let res: Option<LightningPath> = lightning.solve();
         if let Some(path) = res {
+            for coord in &path.path {
+                for adj in coord.adjacents(&Coord::new(WIDTH, HEIGHT)) {
+                    image.put_pixel(adj.x as u32, adj.y as u32, rgb);
+                }
+            }
             for coord in path.path {
-                image.put_pixel(coord.x as u32, coord.y as u32, rgb);
+                image.put_pixel(
+                    coord.x as u32,
+                    coord.y as u32,
+                    Rgb(Bolt::center(&bolt).color),
+                );
             }
         }
     }
