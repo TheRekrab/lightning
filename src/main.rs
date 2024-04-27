@@ -1,11 +1,9 @@
-use crate::coord::Coord;
-use crate::walls::Walls;
+use crate::maze::Maze;
 mod coord;
+mod maze;
 mod walls;
 
 fn main() {
-    let corner: Coord = Coord::new(5, 5);
-    let walls: Walls = Walls::new(&corner);
-
-    println!("{walls:#?}");
+    let maze: Maze = Maze::new(30, 40);
+    let _res = maze.solve();
 }

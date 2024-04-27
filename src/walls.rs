@@ -5,7 +5,7 @@ use rand::prelude::*;
 use crate::coord::Coord;
 
 const X_THRESHOLD: f64 = 0.1;
-const Y_THRESHOLD: f64 = 0.1;
+const Y_THRESHOLD: f64 = 0.2;
 
 #[derive(Debug)]
 struct Wall {
