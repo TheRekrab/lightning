@@ -9,12 +9,14 @@ use crate::{
     walls::Walls,
 };
 
+/// The maze that creates the shape of the lightning.
 #[derive(Debug)]
 pub struct Maze {
     corner: Coord,
     connections: HashMap<Coord, Vec<Coord>>,
 }
 impl Maze {
+    /// Returns a new Maze, using the values from constants.rs
     pub fn new() -> Self {
         if WIDTH == 0 || HEIGHT == 0 {
             panic!("Invalid maze size received: ({WIDTH}, {HEIGHT})");
@@ -38,6 +40,7 @@ impl Maze {
 }
 
 impl Maze {
+    /// After the last spot is knows, goes back to find the shortest path to the start.
     fn backtrack(&self, distances: &HashMap<Coord, usize>, end: &Coord) -> LightningPath {
         let mut oldest_pose: Coord = end.clone();
         let mut path: Vec<Coord> = Vec::new();
@@ -60,6 +63,7 @@ impl Maze {
         LightningPath::new(path)
     }
 
+    /// Returns a LightningPath that is the path that the lightning took. May return None if the maze is impossible to solve.
     pub fn solve(&self) -> Option<LightningPath> {
         let mut changed: HashSet<Coord> = HashSet::new();
         let mut distances: HashMap<Coord, usize> = HashMap::new();

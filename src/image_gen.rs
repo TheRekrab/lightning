@@ -6,6 +6,7 @@ use crate::{
     maze::Maze,
 };
 
+/// Generates a "lightning.jpg" image based of the values in constants.rs
 pub fn generate_image() {
     let mut image: ImageBuffer<Rgb<u8>, Vec<u8>> = ImageBuffer::new(WIDTH as u32, HEIGHT as u32);
 

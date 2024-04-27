@@ -1,4 +1,5 @@
-/// +X right, -X is left. +Y is up, -Y is down. (0, 0) is bottom left corner.
+/// Coord, or Coordinate, is a way to store a two-dimensional point.
+/// +X is right, -X is left. +Y is up, -Y is down. (0, 0) is bottom left corner.
 #[derive(PartialEq, Eq, Debug, Clone, Hash)]
 pub struct Coord {
     pub x: usize,
@@ -13,6 +14,7 @@ impl std::fmt::Display for Coord {
 
 // contructor function
 impl Coord {
+    /// Creates a new Coord with given x and y values
     pub fn new(x: usize, y: usize) -> Self {
         Self { x, y }
     }
@@ -20,6 +22,7 @@ impl Coord {
 
 // adjacency methods
 impl Coord {
+    /// Tells whether a coordinate is to the left of the current coordinate.
     pub fn is_left(&self, other: &Self) -> bool {
         if let Some(left) = self.left() {
             return &left == other;
@@ -27,6 +30,7 @@ impl Coord {
         false
     }
 
+    /// Tells whether a coordinate is to the right of the current coordinate.
     pub fn is_right(&self, other: &Self) -> bool {
         if let Some(right) = self.right() {
             return &right == other;
@@ -34,6 +38,7 @@ impl Coord {
         false
     }
 
+    /// Tells whether a coordinate is above the current coordinaate.
     pub fn is_up(&self, other: &Self) -> bool {
         if let Some(up) = self.up() {
             return &up == other;
@@ -41,6 +46,7 @@ impl Coord {
         false
     }
 
+    /// Tells whether a coordinate is below the current coordinate.
     pub fn is_down(&self, other: &Self) -> bool {
         if let Some(down) = self.down() {
             return &down == other;
@@ -48,6 +54,8 @@ impl Coord {
         false
     }
 
+    /// Generates the coordinate directly left of the current one.
+    /// Returns None if that would go past 0
     pub fn left(&self) -> Option<Self> {
         if self.x == 0 {
             return None;
@@ -56,14 +64,18 @@ impl Coord {
         Some(Self::new(self.x - 1, self.y))
     }
 
+    /// Generates the coordinate that is directly right of the current coordinate.
     pub fn right(&self) -> Option<Self> {
         Some(Self::new(self.x + 1, self.y))
     }
 
+    /// Generates the coordinate that is directly above the current coordinate.
     pub fn up(&self) -> Option<Self> {
         Some(Self::new(self.x, self.y + 1))
     }
 
+    /// Generates the coordinate that is directly below the current coordinate.
+    /// Returns None if that would go past 0
     pub fn down(&self) -> Option<Self> {
         if self.y == 0 {
             return None;
@@ -71,10 +83,12 @@ impl Coord {
         Some(Self::new(self.x, self.y - 1))
     }
 
+    /// Tells whether a point would fit inside of a rectange with points at (0, 0) and the corner supplied.
     fn fits(&self, corner: &Self) -> bool {
         self.x <= corner.x && self.y <= corner.y
     }
 
+    /// Generates all VALID adjacent coordinates, ignoring diagonals.
     pub fn adjacents(&self, corner: &Self) -> Vec<Self> {
         let possible: Vec<Option<Self>> = vec![self.left(), self.right(), self.up(), self.down()];
         possible
