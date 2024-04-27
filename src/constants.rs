@@ -5,4 +5,12 @@ pub const HEIGHT: usize = 300;
 pub const X_THRESHOLD: f64 = 0.05;
 pub const Y_THRESHOLD: f64 = 0.65;
 
-pub const BOLTS: [Bolt; 4] = [Bolt::blue(), Bolt::red(), Bolt::green(), Bolt::white()];
+pub fn bolts() -> Vec<Bolt> {
+    vec![
+        Bolt::blue(),
+        Bolt::red(),
+        Bolt::green(),
+        Bolt::white(),
+        Bolt::new(200, 50, 30),
+    ]
+}

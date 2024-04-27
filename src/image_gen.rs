@@ -1,7 +1,7 @@
 use image::{ImageBuffer, Rgb};
 
 use crate::{
-    constants::{BOLTS, HEIGHT, WIDTH},
+    constants::{bolts, HEIGHT, WIDTH},
     lightning_path::LightningPath,
     maze::Maze,
 };
@@ -9,7 +9,7 @@ use crate::{
 pub fn generate_image() {
     let mut image: ImageBuffer<Rgb<u8>, Vec<u8>> = ImageBuffer::new(WIDTH as u32, HEIGHT as u32);
 
-    for bolt in BOLTS {
+    for bolt in bolts() {
         let rgb = Rgb(bolt.color);
         let lightning = Maze::new();
         let res: Option<LightningPath> = lightning.solve();
