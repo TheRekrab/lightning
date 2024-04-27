@@ -1,8 +1,8 @@
 /// +X right, -X is left. +Y is up, -Y is down. (0, 0) is bottom left corner.
-#[derive(PartialEq, Eq, Debug, Clone)]
+#[derive(PartialEq, Eq, Debug, Clone, Hash)]
 pub struct Coord {
-    x: usize,
-    y: usize,
+    pub x: usize,
+    pub y: usize,
 }
 
 impl std::fmt::Display for Coord {
@@ -20,7 +20,35 @@ impl Coord {
 
 // adjacency methods
 impl Coord {
-    fn left(&self) -> Option<Self> {
+    pub fn is_left(&self, other: &Self) -> bool {
+        if let Some(left) = self.left() {
+            return &left == other;
+        }
+        false
+    }
+
+    pub fn is_right(&self, other: &Self) -> bool {
+        if let Some(right) = self.right() {
+            return &right == other;
+        }
+        false
+    }
+
+    pub fn is_up(&self, other: &Self) -> bool {
+        if let Some(up) = self.up() {
+            return &up == other;
+        }
+        false
+    }
+
+    pub fn is_down(&self, other: &Self) -> bool {
+        if let Some(down) = self.down() {
+            return &down == other;
+        }
+        false
+    }
+
+    pub fn left(&self) -> Option<Self> {
         if self.x == 0 {
             return None;
         }
@@ -28,15 +56,15 @@ impl Coord {
         Some(Self::new(self.x - 1, self.y))
     }
 
-    fn right(&self) -> Option<Self> {
+    pub fn right(&self) -> Option<Self> {
         Some(Self::new(self.x + 1, self.y))
     }
 
-    fn up(&self) -> Option<Self> {
+    pub fn up(&self) -> Option<Self> {
         Some(Self::new(self.x, self.y + 1))
     }
 
-    fn down(&self) -> Option<Self> {
+    pub fn down(&self) -> Option<Self> {
         if self.y == 0 {
             return None;
         }
@@ -63,7 +91,7 @@ mod coord_tests {
     use super::Coord;
 
     #[test]
-    fn adj_test() {
+    fn adj_test_1() {
         let corner: Coord = Coord::new(5, 5);
 
         let c1: Coord = Coord::new(3, 3);
@@ -97,5 +125,22 @@ mod coord_tests {
 
         let c5: Coord = Coord::new(6, 6);
         assert_eq!(c5.adjacents(&corner), vec![])
+    }
+
+    #[test]
+    fn adj_test_2() {
+        let center: Coord = Coord::new(1, 1);
+
+        let left: Coord = Coord::new(0, 1);
+        assert!(center.is_left(&left));
+
+        let right: Coord = Coord::new(2, 1);
+        assert!(center.is_right(&right));
+
+        let up: Coord = Coord::new(1, 2);
+        assert!(center.is_up(&up));
+
+        let down: Coord = Coord::new(1, 0);
+        assert!(center.is_down(&down));
     }
 }
