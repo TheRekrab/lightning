@@ -1,11 +1,9 @@
+use crate::constants::{X_THRESHOLD, Y_THRESHOLD};
 use std::collections::HashSet;
 
 use rand::prelude::*;
 
 use crate::coord::Coord;
-
-const X_THRESHOLD: f64 = 0.05;
-const Y_THRESHOLD: f64 = 0.65;
 
 #[derive(Debug)]
 struct Wall {
