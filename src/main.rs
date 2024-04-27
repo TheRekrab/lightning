@@ -1,6 +1,4 @@
-use lightning::Maze;
+use crate::coord::Coord;
+mod coord;
 
-fn main() {
-    let maze: Maze = Maze::new(3, 3);
-    println!("{}", maze);
-}
+fn main() {}

@@ -1,35 +1,101 @@
-
-#[derive(Hash, Eq, PartialEq, Debug)]
+/// +X right, -X is left. +Y is up, -Y is down. (0, 0) is bottom left corner.
+#[derive(PartialEq, Eq, Debug, Clone)]
 pub struct Coord {
-    x: isize,
-    y: isize,
+    x: usize,
+    y: usize,
 }
+
+impl std::fmt::Display for Coord {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "({}, {})", self.x, self.y)
+    }
+}
+
+// contructor function
 impl Coord {
-    pub fn new(x: isize, y: isize) -> Self {
+    pub fn new(x: usize, y: usize) -> Self {
         Self { x, y }
     }
+}
 
-    pub fn some_adjs(
-        &self,
-        rng: &mut ThreadRng,
-        stops: &(HashMap<Coord, bool>, HashMap<Coord, bool>)
-    ) -> Vec<Coord> {
-        let left = Coord::new(self.x - 1, self.y);
-        let right = Coord::new(self.x + 1, self.y);
-        let up = Coord::new(self.x, self.y - 1);
-        let down = Coord::new(self.x, self.y + 1);
+// adjacency methods
+impl Coord {
+    fn left(&self) -> Option<Self> {
+        if self.x == 0 {
+            return None;
+        }
 
-        let mut some: Vec<Coord> = Vec::new();
-
-        if (stops.)
-
-        some
+        Some(Self::new(self.x - 1, self.y))
     }
 
-    fn fits(&self, width: &isize, height: &isize) -> bool {
-        if 0 > self.x || 0 > self.y || *width <= self.x || *height <= self.y {
-            return false;
+    fn right(&self) -> Option<Self> {
+        Some(Self::new(self.x + 1, self.y))
+    }
+
+    fn up(&self) -> Option<Self> {
+        Some(Self::new(self.x, self.y + 1))
+    }
+
+    fn down(&self) -> Option<Self> {
+        if self.y == 0 {
+            return None;
         }
-        true
+        Some(Self::new(self.x, self.y - 1))
+    }
+
+    fn fits(&self, corner: &Self) -> bool {
+        self.x <= corner.x && self.y <= corner.y
+    }
+
+    pub fn adjacents(&self, corner: &Self) -> Vec<Self> {
+        let possible: Vec<Option<Self>> = vec![self.left(), self.right(), self.up(), self.down()];
+        possible
+            .iter()
+            .filter(|o| o.is_some()) // removes any none
+            .map(|o| o.clone().unwrap()) // unwraps all values, because they all contain something
+            .filter(|coord| coord.fits(&corner)) // anything out of bounds of the corner is bad
+            .collect() // into Vec<Self>
+    }
+}
+
+#[cfg(test)]
+mod coord_tests {
+    use super::Coord;
+
+    #[test]
+    fn adj_test() {
+        let corner: Coord = Coord::new(5, 5);
+
+        let c1: Coord = Coord::new(3, 3);
+        assert_eq!(
+            c1.adjacents(&corner),
+            vec![
+                Coord::new(2, 3),
+                Coord::new(4, 3),
+                Coord::new(3, 4),
+                Coord::new(3, 2)
+            ]
+        );
+
+        let c2: Coord = Coord::new(2, 0);
+        assert_eq!(
+            c2.adjacents(&corner),
+            vec![Coord::new(1, 0), Coord::new(3, 0), Coord::new(2, 1)]
+        );
+
+        let c3: Coord = Coord::new(0, 2);
+        assert_eq!(
+            c3.adjacents(&corner),
+            vec![Coord::new(1, 2), Coord::new(0, 3), Coord::new(0, 1)]
+        );
+
+        let c4: Coord = Coord::new(5, 4);
+        assert_eq!(
+            c4.adjacents(&corner),
+            vec![Coord::new(4, 4), Coord::new(5, 5), Coord::new(5, 3)]
+        );
+
+        let c5: Coord = Coord::new(6, 6);
+        assert_eq!(c5.adjacents(&corner), vec![])
     }
 }
