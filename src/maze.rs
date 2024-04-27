@@ -1,8 +1,13 @@
+use crate::lightning_path::LightningPath;
 use std::collections::{HashMap, HashSet};
 
 use rand::{rngs::ThreadRng, Rng};
 
-use crate::{coord::Coord, walls::Walls};
+use crate::{
+    constants::{HEIGHT, WIDTH},
+    coord::Coord,
+    walls::Walls,
+};
 
 #[derive(Debug)]
 pub struct Maze {
@@ -10,16 +15,16 @@ pub struct Maze {
     connections: HashMap<Coord, Vec<Coord>>,
 }
 impl Maze {
-    pub fn new(width: usize, height: usize) -> Self {
-        if width == 0 || height == 0 {
-            panic!("Invalid maze size received: ({width}, {height})");
+    pub fn new() -> Self {
+        if WIDTH == 0 || HEIGHT == 0 {
+            panic!("Invalid maze size received: ({WIDTH}, {HEIGHT})");
         }
-        let corner: Coord = Coord::new(width - 1, height - 1);
+        let corner: Coord = Coord::new(WIDTH - 1, HEIGHT - 1);
         let walls: Walls = Walls::new(&corner);
         let mut connections: HashMap<Coord, Vec<Coord>> = HashMap::new();
 
-        for x in 0..width {
-            for y in 0..height {
+        for x in 0..WIDTH {
+            for y in 0..HEIGHT {
                 let coord: Coord = Coord::new(x, y);
                 connections.insert(coord.clone(), walls.connections(&coord));
             }
@@ -33,7 +38,7 @@ impl Maze {
 }
 
 impl Maze {
-    fn backtrack(&self, distances: &HashMap<Coord, usize>, end: &Coord) -> Vec<Coord> {
+    fn backtrack(&self, distances: &HashMap<Coord, usize>, end: &Coord) -> LightningPath {
         let mut oldest_pose: Coord = end.clone();
         let mut path: Vec<Coord> = Vec::new();
         let mut best_dist: usize = *distances.get(end).unwrap();
@@ -52,10 +57,10 @@ impl Maze {
 
         path.push(end.clone());
 
-        path
+        LightningPath::new(path)
     }
 
-    pub fn solve(&self) -> Option<Vec<Coord>> {
+    pub fn solve(&self) -> Option<LightningPath> {
         let mut changed: HashSet<Coord> = HashSet::new();
         let mut distances: HashMap<Coord, usize> = HashMap::new();
 

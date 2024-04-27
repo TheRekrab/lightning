@@ -1,16 +1,13 @@
-use crate::constants::{HEIGHT, WIDTH};
-use crate::image_gen::generate_image;
-use crate::maze::Maze;
+use image_gen::generate_image;
+
+mod bolt;
 mod constants;
 mod coord;
 mod image_gen;
+mod lightning_path;
 mod maze;
 mod walls;
 
 fn main() {
-    let maze: Maze = Maze::new(WIDTH, HEIGHT);
-    let res = maze.solve();
-    if let Some(path) = res {
-        generate_image(WIDTH, HEIGHT, &path);
-    }
+    generate_image();
 }
