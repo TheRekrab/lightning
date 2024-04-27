@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use rand::{rngs::ThreadRng, Rng};
 
@@ -56,7 +56,7 @@ impl Maze {
     }
 
     pub fn solve(&self) -> Option<Vec<Coord>> {
-        let mut changed: Vec<Coord> = Vec::new();
+        let mut changed: HashSet<Coord> = HashSet::new();
         let mut distances: HashMap<Coord, usize> = HashMap::new();
 
         let mut rng: ThreadRng = rand::thread_rng();
@@ -66,7 +66,7 @@ impl Maze {
 
         for x in 0..=self.corner.x {
             let coord: Coord = Coord::new(x, self.corner.y);
-            changed.push(coord.clone());
+            changed.insert(coord.clone());
             distances.insert(coord.clone(), 0);
         }
 
@@ -74,7 +74,7 @@ impl Maze {
         let mut dist: usize = 0;
 
         while !changed.is_empty() && !distances.contains_key(&final_location) {
-            let mut new_changed: Vec<Coord> = Vec::new();
+            let mut new_changed: HashSet<Coord> = HashSet::new();
             for coord in &changed {
                 for adj in self.connections.get(coord).unwrap() {
                     let mut update_distance: bool = true;
@@ -86,7 +86,7 @@ impl Maze {
 
                     if update_distance {
                         distances.insert(adj.clone(), dist);
-                        new_changed.push(adj.clone());
+                        new_changed.insert(adj.clone());
                     }
                 }
             }
