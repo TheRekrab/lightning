@@ -7,10 +7,10 @@ pub const Y_THRESHOLD: f64 = 0.65;
 
 pub fn bolts() -> Vec<Bolt> {
     vec![
-        Bolt::blue(),
-        Bolt::red(),
-        Bolt::green(),
-        Bolt::white(),
-        Bolt::new(156, 189, 222),
+        // Bolt::blue(),
+        // Bolt::red(),
+        // Bolt::green(),
+        // Bolt::white(),
+        Bolt::new(55, 119, 247),
     ]
 }
