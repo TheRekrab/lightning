@@ -11,6 +11,6 @@ pub fn bolts() -> Vec<Bolt> {
         Bolt::red(),
         Bolt::green(),
         Bolt::white(),
-        Bolt::new(200, 50, 30),
+        Bolt::new(156, 189, 222),
     ]
 }
